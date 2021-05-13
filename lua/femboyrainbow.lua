@@ -18,14 +18,14 @@ local function mark_hl()
 		local buf, line, col = vim.fn.bufnr('%'), pos[2], pos[3]
 		if prev_pos[buf] == nil then initpos(buf) end
 		local ns = ns_id[v]
-		if line ~= 0 or col ~= 0 then
 		if line ~= prev_pos[buf][v].line or col ~= prev_pos[buf][v].col then
 			vim.api.nvim_buf_clear_namespace( buf, ns, 0, -1 )
-			vim.api.nvim_buf_add_highlight(buf, ns, 'Rainbow', line - 1, col - 1, col)
-			vim.api.nvim_buf_set_virtual_text(buf, ns, line - 1, { { "  '"..v, 'Rainbow' } }, { })
+			if line ~= 0 or col ~= 0 then
+				vim.api.nvim_buf_add_highlight(buf, ns, 'Rainbow', line - 1, col - 1, col)
+				vim.api.nvim_buf_set_virtual_text(buf, ns, line - 1, { { "  '"..v, 'Rainbow' } }, { })
+			end
 			prev_pos[buf][v].line = line
 			prev_pos[buf][v].col = col
-		end
 		end
 	end
 end
