@@ -2,7 +2,7 @@ local lastpos = { line = 0, col = 0 }
 local ns_id = vim.api.nvim_create_namespace('mark_a')
 local function Rainbow_hl ( )
 	Rainbowid = Rainbowid or 0
-	Rainbowid = Rainbowid + 4
+	Rainbowid = Rainbowid + 8
 	if Rainbowid >= 256 * 6 then
 		Rainbowid = 0
 	end
@@ -25,7 +25,7 @@ local function Rainbow_hl ( )
 	end
 	local hex = string.format("#%02X%02X%02X", r, g, b)
 	vim.api.nvim_command([[hi Rainbow guifg=]]..hex)
-	local pos = vim.fn.getpos("'a")
+	local pos = vim.fn.getpos("'m")
 	local buf, line, col = pos[1], pos[2], pos[3]
 	if line ~= lastpos.line or col ~= lastpos.col then
 		vim.api.nvim_buf_clear_namespace( buf, ns_id, 0, -1 )
