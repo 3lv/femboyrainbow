@@ -21,8 +21,13 @@ local function mark_hl()
 		if line ~= prev_pos[buf][v].line or col ~= prev_pos[buf][v].col then
 			vim.api.nvim_buf_clear_namespace( buf, ns, 0, -1 )
 			if line ~= 0 or col ~= 0 then
-				vim.api.nvim_buf_add_highlight(buf, ns, 'Rainbow', line - 1, col - 1, col)
-				vim.api.nvim_buf_set_virtual_text(buf, ns, line - 1, { { "  '"..v, 'Rainbow' } }, { })
+				local hl_group = 'Rainbow'
+				char = vim.api.nvim_get_current_line():sub(col,col)
+				if char:match('%s') then
+					hl_group = 'RainbowBg'
+				end
+				vim.api.nvim_buf_add_highlight(buf, ns, hl_group, line - 1, col - 1, col)
+				vim.api.nvim_buf_set_virtual_text(buf, ns, line - 1, { { "  '"..v, hl_group} }, { })
 			end
 			prev_pos[buf][v].line = line
 			prev_pos[buf][v].col = col
@@ -55,6 +60,7 @@ local function Rainbow_hl ( )
 	end
 	local hex = string.format("#%02X%02X%02X", r, g, b)
 	vim.api.nvim_command([[hi Rainbow guifg=]]..hex)
+	vim.api.nvim_command([[hi RainbowBg guibg=]]..hex)
 end
 
 
