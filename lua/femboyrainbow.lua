@@ -15,7 +15,7 @@ end
 local function mark_hl()
 	for _, v in ipairs(letters) do
 		local pos = vim.fn.getpos("'"..v)
-		local buf, line, col = vim.api.bufnr('%'), pos[2], pos[3]
+		local buf, line, col = vim.fn.bufnr('%'), pos[2], pos[3]
 		if prev_poz[buf] == nil then initpos(buf) end
 		local ns = ns_id[v]
 		if line ~= prev_pos[buf][v].line or col ~= prev_pos[buf][v].col then
