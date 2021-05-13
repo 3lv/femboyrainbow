@@ -1,7 +1,10 @@
 local letters = { 'a', 'b', 'c', 'm' }
 local prev_pos = { }
-for _, v in ipairs(letters) do
-	prev_pos[v] = { line = 0, col = 0 }
+local function initpos ( buf )
+	prev_poz[buf] = { }
+	for _, v in ipairs(letters) do
+		prev_pos[buf][v] = { line = 0, col = 0 }
+	end
 end
 
 local ns_id = { }
@@ -12,15 +15,15 @@ end
 local function mark_hl()
 	for _, v in ipairs(letters) do
 		local pos = vim.fn.getpos("'"..v)
-		local buf, line, col = pos[1], pos[2], pos[3]
+		local buf, line, col = vim.api.bufnr('%'), pos[2], pos[3]
+		if prev_poz[buf] == nil then initpos(buf) end
 		local ns = ns_id[v]
-		if line ~= prev_pos[v].line or col ~= prev_pos[v].col then
-			print( buf, ns, line -1, "  '"..v)
+		if line ~= prev_pos[buf][v].line or col ~= prev_pos[buf][v].col then
 			vim.api.nvim_buf_clear_namespace( buf, ns, 0, -1 )
 			vim.api.nvim_buf_add_highlight(buf, ns, 'Rainbow', line - 1, col - 1, col)
 			vim.api.nvim_buf_set_virtual_text(buf, ns, line - 1, { { "  '"..v, 'Rainbow' } }, { })
-			prev_pos[v].line = line
-			prev_pos[v].col = col
+			prev_pos[buf][v].line = line
+			prev_pos[buf][v].col = col
 		end
 	end
 end
