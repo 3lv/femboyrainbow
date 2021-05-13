@@ -8,7 +8,7 @@ local function mark_hl()
 	if line ~= prev_pos.m.line or col ~= prev_pos.m.col then
 		vim.api.nvim_buf_clear_namespace( buf, ns_id, 0, -1 )
 		vim.api.nvim_buf_add_highlight(buf, ns_id, 'Rainbow', line - 1, col - 1, col)
-		vim.api.nvim_buf_set_virtal_text(buf, ns_id, line - 1, { { "  'm", 'Rainbow' } }, { })
+		vim.api.nvim_buf_set_virtual_text(buf, ns_id, line - 1, { { "  'm", 'Rainbow' } }, { })
 		prev_poz.m.line = line
 		prev_poz.m.col = col
 	end
