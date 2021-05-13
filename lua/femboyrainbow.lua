@@ -1,7 +1,7 @@
 local letters = { 'a', 'b', 'c', 'm' }
 local prev_pos = { }
 local function initpos ( buf )
-	prev_poz[buf] = { }
+	prev_pos[buf] = { }
 	for _, v in ipairs(letters) do
 		prev_pos[buf][v] = { line = 0, col = 0 }
 	end
@@ -16,7 +16,7 @@ local function mark_hl()
 	for _, v in ipairs(letters) do
 		local pos = vim.fn.getpos("'"..v)
 		local buf, line, col = vim.fn.bufnr('%'), pos[2], pos[3]
-		if prev_poz[buf] == nil then initpos(buf) end
+		if prev_pos[buf] == nil then initpos(buf) end
 		local ns = ns_id[v]
 		if line ~= prev_pos[buf][v].line or col ~= prev_pos[buf][v].col then
 			vim.api.nvim_buf_clear_namespace( buf, ns, 0, -1 )
