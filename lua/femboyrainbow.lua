@@ -6,6 +6,20 @@ end
 local prev_pos
 setDefault(prev_poz, { line = 0, col = 0 })
 local ns_id = vim.api.nvim_create_namespace('mark_a')
+
+
+local function mark_hl()
+	local pos = vim.fn.getpos("'m")
+	local buf, line, col = pos[1], pos[2], pos[3]
+	if line ~= prev_poz.m.line or col ~= prev_poz.m.col then
+		vim.api.nvim_buf_clear_namespace( buf, ns_id, 0, -1 )
+		vim.api.nvim_buf_add_highlight(buf, ns_id, 'Rainbow', line - 1, col - 1, col)
+		vim.api.nvim_buf_add_highlight(buf, ns_id, line - 1, { { "  'm", 'Rainbow' } }, { })
+		prev_poz.m.line = line
+		prev_poz.m.col = col
+	end
+end
+
 local function Rainbow_hl ( )
 	Rainbowid = Rainbowid or 0
 	Rainbowid = Rainbowid + 8
@@ -31,19 +45,14 @@ local function Rainbow_hl ( )
 	end
 	local hex = string.format("#%02X%02X%02X", r, g, b)
 	vim.api.nvim_command([[hi Rainbow guifg=]]..hex)
-	local pos = vim.fn.getpos("'m")
-	local buf, line, col = pos[1], pos[2], pos[3]
-	if line ~= prev_poz.m.line or col ~= prev_poz.m.col then
-		vim.api.nvim_buf_clear_namespace( buf, ns_id, 0, -1 )
-		vim.api.nvim_buf_add_highlight(buf, ns_id, 'Rainbow', line - 1, col - 1, col)
-		vim.api.nvim_buf_add_highlight(buf, ns_id, line - 1, { { "  'm", 'Rainbow' } }, { })
-		prev_poz.m.line = line
-		prev_poz.m.col = col
-	end
 end
+
+
 local timer = vim.loop.new_timer()
+local marktimer = vim.loop.new_timer()
 local function Start_Rainbow()
 	timer:start(0, 20, vim.schedule_wrap(Rainbow_hl))
+	marktimer:start(0, 40, vim.schedule_wrap(mark_hl))
 end
 
 M = { }
