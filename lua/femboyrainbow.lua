@@ -34,7 +34,7 @@ local function Rainbow_hl ( )
 end
 local timer = vim.loop.new_timer()
 local function Start_Rainbow()
-	timer:start(0, 10, vim.schedule_wrap(Rainbow_hl))
+	timer:start(0, 20, vim.schedule_wrap(Rainbow_hl))
 end
 
 M = { }
