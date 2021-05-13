@@ -1,4 +1,10 @@
-local lastpos = { line = 0, col = 0 }
+local mt = {__index = function (t) return t.___ end}
+function setDefault (t, d)
+	t.___ = d
+	setmetatable(t, mt)
+end
+local prev_pos
+setDefault(prev_poz, { line = 0, col = 0 })
 local ns_id = vim.api.nvim_create_namespace('mark_a')
 local function Rainbow_hl ( )
 	Rainbowid = Rainbowid or 0
@@ -27,9 +33,12 @@ local function Rainbow_hl ( )
 	vim.api.nvim_command([[hi Rainbow guifg=]]..hex)
 	local pos = vim.fn.getpos("'m")
 	local buf, line, col = pos[1], pos[2], pos[3]
-	if line ~= lastpos.line or col ~= lastpos.col then
+	if line ~= prev_poz.m.line or col ~= prev_poz.m.col then
 		vim.api.nvim_buf_clear_namespace( buf, ns_id, 0, -1 )
 		vim.api.nvim_buf_add_highlight(buf, ns_id, 'Rainbow', line - 1, col - 1, col)
+		vim.api.nvim_buf_add_highlight(buf, ns_id, line - 1, { { "  'm", 'Rainbow' } }, { })
+		prev_poz.m.line = line
+		prev_poz.m.col = col
 	end
 end
 local timer = vim.loop.new_timer()
