@@ -5,7 +5,7 @@ local ns_id = vim.api.nvim_create_namespace('mark_a')
 local function mark_hl()
 	local pos = vim.fn.getpos("'m")
 	local buf, line, col = pos[1], pos[2], pos[3]
-	if line ~= prev_poz.m.line or col ~= prev_poz.m.col then
+	if line ~= prev_pos.m.line or col ~= prev_pos.m.col then
 		vim.api.nvim_buf_clear_namespace( buf, ns_id, 0, -1 )
 		vim.api.nvim_buf_add_highlight(buf, ns_id, 'Rainbow', line - 1, col - 1, col)
 		vim.api.nvim_buf_add_highlight(buf, ns_id, line - 1, { { "  'm", 'Rainbow' } }, { })
