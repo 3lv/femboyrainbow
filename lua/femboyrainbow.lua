@@ -1,12 +1,6 @@
-local mt = {__index = function (t) return t.___ end}
-function setDefault (t, d)
-	t.___ = d
-	setmetatable(t, mt)
-end
-local prev_pos
-setDefault(prev_poz, { line = 0, col = 0 })
-local ns_id = vim.api.nvim_create_namespace('mark_a')
+local prev_pos = { m = { } }
 
+local ns_id = vim.api.nvim_create_namespace('mark_a')
 
 local function mark_hl()
 	local pos = vim.fn.getpos("'m")
